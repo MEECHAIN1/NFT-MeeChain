@@ -1,0 +1,290 @@
+/* 
+  Custom Animations for MeeChain Dashboard
+*/
+
+/* Subtle floating animation for the MeeBot icon */
+@keyframes meebot-float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.meebot-float {
+  animation: meebot-float 4s ease-in-out infinite;
+}
+
+
+/* Staggered list fade-in animation with a bounce */
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  /* Set defaults for when JS isn't controlling the animation delay */
+  animation: fade-in-up 0.6s ease-out forwards;
+  opacity: 0; /* Start hidden */
+}
+
+/* Animated background gradient */
+@keyframes animated-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient-bg {
+  background-size: 200% 200%;
+  animation: animated-gradient 15s ease infinite;
+}
+
+/* Animation for MeeBot widget appearing with a bounce */
+@keyframes meebot-widget-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-meebot-appear {
+  animation: meebot-widget-appear 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Animation for MeeBot Evolution */
+@keyframes evolutionGlow {
+  0% { filter: drop-shadow(0 0 2px #a855f7); transform: scale(1); }
+  50% { filter: drop-shadow(0 0 20px #a855f7) drop-shadow(0 0 10px #60a5fa); transform: scale(1.05); }
+  100% { filter: drop-shadow(0 0 2px #a855f7); transform: scale(1); }
+}
+
+.evolve {
+  animation: evolutionGlow 2s ease-in-out forwards;
+}
+
+/* --- New Animations for Mint Celebration --- */
+
+/* Crystal burst effect for new NFT cards */
+@keyframes burst {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 15px #00f0ff); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-crystal-burst {
+  animation: burst 1.5s ease-out forwards;
+}
+
+/* Gentle glowing aura for timeline images */
+@keyframes glowPulse {
+  0% { filter: drop-shadow(0 0 4px #0ea5e9); }
+  50% { filter: drop-shadow(0 0 12px #0ea5e9); }
+  100% { filter: drop-shadow(0 0 4px #0ea5e9); }
+}
+
+.glow {
+  animation: glowPulse 3s infinite ease-in-out;
+}
+
+
+/* --- Chatbot Styles --- */
+
+.chatbot-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 1000;
+}
+
+.chatbot-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 25px rgba(99, 102, 241, 0.5);
+}
+
+.chatbot-panel {
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  width: 380px;
+  max-width: calc(100vw - 48px);
+  height: 500px;
+  max-height: calc(100vh - 120px);
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.chatbot-panel.open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.chatbot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+  flex-shrink: 0;
+}
+
+.chatbot-header button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.chatbot-messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message-bubble-wrapper {
+  display: flex;
+}
+
+.message-bubble-wrapper.user {
+  justify-content: flex-end;
+}
+
+.message-bubble-wrapper.model {
+  justify-content: flex-start;
+}
+
+.message-bubble {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.message-bubble.user {
+  background-color: #6366f1;
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.message-bubble.model {
+  background-color: #f3f4f6;
+  color: #1f2937;
+  border-bottom-left-radius: 4px;
+}
+
+.chatbot-input-form {
+  display: flex;
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.chatbot-input {
+  flex-grow: 1;
+  border: 1px solid #d1d5db;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  background-color: white;
+}
+
+.chatbot-input:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+.chatbot-input:disabled {
+  background-color: #f3f4f6;
+}
+
+.chatbot-send-btn {
+  background: none;
+  border: none;
+  color: #6366f1;
+  margin-left: 8px;
+  padding: 8px;
+  cursor: pointer;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chatbot-send-btn:disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+@keyframes typing-dot {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1.0); }
+}
+
+.typing-indicator span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #9ca3af;
+  border-radius: 50%;
+  animation: typing-dot 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }

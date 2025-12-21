@@ -1,0 +1,7 @@
+{
+  "name": "Dashboard",
+  "description": "A magical landing page for the MeeChain Dashboard, displaying NFTs, Badges, Proposals, and a Contributor Timeline, all powered by Firestore and enhanced with Gemini.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
