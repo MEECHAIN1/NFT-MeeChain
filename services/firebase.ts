@@ -1,7 +1,8 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 
-// Configuration provided for the MeeBot project
+// Full configuration from the project credentials
 const firebaseConfig = {
   apiKey: "AIzaSyBhprcnCRZVHE3df9wvK9VkQdSUwiGw11E",
   authDomain: "meechainmeebot-v1-218162-261fc.firebaseapp.com",
@@ -16,3 +17,15 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+export const auth = getAuth(app);
+
+// Monitor auth state and attempt anonymous sign-in
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Authenticated as:", user.uid);
+  } else {
+    signInAnonymously(auth).catch((error) => {
+      console.warn("Firebase Anonymous Auth failed. Firestore access might be denied by security rules.", error.code, error.message);
+    });
+  }
+});

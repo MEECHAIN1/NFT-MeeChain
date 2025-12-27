@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-// Update import to the new dataService and rename functions
 import { getAccount, logBadge, logTimelineEvent, logVote, addXP, triggerEvolution, logMint, XP_VALUES } from '../services/dataService';
 import { useUserNFTs } from '../hooks/useUserNFTs';
 import { useUserBadges } from '../hooks/useUserBadges';
@@ -12,7 +11,7 @@ import { useMintMeeBot, useVoteOnProposal, useClaimBadge } from '../services/con
 import { generateSpeech } from '../services/geminiService';
 import { getAudioContext, playBase64Audio } from '../utils/audioUtils';
 
-import HallOfOrigins from './MyCollection';
+import NFTGallery from './NFTGallery';
 import MyDesigns from './MyDesigns';
 import BadgeGallery from './BadgeGallery';
 import ProposalGrid from './ProposalGrid';
@@ -53,8 +52,8 @@ export default function LandingPage() {
     // Proactive MeeBot Logic using Intersection Observer
     useEffect(() => {
         const observerOptions = {
-            root: null, // observe intersections in the viewport
-            threshold: 0.6, // 60% of the element must be visible
+            root: null, 
+            threshold: 0.6,
         };
 
         const callback = (entries: IntersectionObserverEntry[]) => {
@@ -80,19 +79,14 @@ export default function LandingPage() {
         
         const refs = [collectionRef, designsRef, proposalsRef];
         refs.forEach(ref => {
-            if (ref.current) {
-                observer.observe(ref.current);
-            }
+            if (ref.current) observer.observe(ref.current);
         });
 
         return () => {
             refs.forEach(ref => {
-                if (ref.current) {
-                    observer.unobserve(ref.current);
-                }
+                if (ref.current) observer.unobserve(ref.current);
             });
         };
-    // Re-run observer setup if loading states change, ensuring refs are attached to rendered elements
     }, [nftsLoading, designsLoading, proposalsLoading]);
 
   const handleActionSuccess = async (message: string, meeBotMsg: string, xpToAdd: number = 0) => {
@@ -101,12 +95,10 @@ export default function LandingPage() {
       setNotification(`${message} (+${xpToAdd} XP)`);
 
       if (leveledUp) {
-        // Evolve the most recently minted NFT (which is the first in the array)
         const botToEvolve = nfts[0];
         if (botToEvolve) {
           const evolvedBot = await triggerEvolution(botToEvolve.id, `Reached Level ${newLevel}!`);
           if (evolvedBot) {
-            // Use a timeout to ensure the level-up message isn't instantly overwritten
             setTimeout(() => {
               setMeeBotMessage(`Level up to ${newLevel}! Your ${evolvedBot.name} felt that power and has evolved!`);
               setEvolvingNftId(evolvedBot.id);
@@ -126,35 +118,32 @@ export default function LandingPage() {
   const { write: mintNFT, isLoading: isMinting } = useMintMeeBot({
     onSuccess: async () => {
       const nftNumber = Math.floor(Math.random() * 9000) + 1000;
-      
       const firstWordsText = `Greetings, creator! I am MeeBot #${nftNumber}. It is an honor to be born.`;
       const firstWordsAudio = await generateSpeech(firstWordsText);
 
       const newNftData: Omit<NFT, 'id'> = {
         name: `MeeBot #${nftNumber}`,
         imageUrl: `https://picsum.photos/seed/meebot${nftNumber}/500`,
-        rarity: 'Rare',
+        rarity: Math.random() > 0.8 ? 'Epic' : (Math.random() > 0.5 ? 'Rare' : 'Common'),
         description: 'A freshly minted MeeBot, ready for adventure in the ecosystem.',
         txHash: `0x${[...Array(64)].map(() => Math.floor(Math.random() * 16).toString(16)).join('')}`,
         firstWords: firstWordsAudio || undefined,
       };
 
       const newNft = await logMint(newNftData);
-      const mintedName = newNft.name; // Use the name from the returned object for consistency
-
-      setNewlyMintedNftId(newNft.id); // Trigger celebration animation
-      setViewingCertificateForNft(newNft); // Open the birth certificate modal
+      setNewlyMintedNftId(newNft.id);
+      setViewingCertificateForNft(newNft);
 
       await logTimelineEvent({
         type: TimelineEventType.Mint,
-        title: `${mintedName} was born!`,
+        title: `${newNft.name} was born!`,
         description: `A new ${newNft.rarity} companion has joined the collective.`,
         imageUrl: newNft.imageUrl,
         txHash: newNft.txHash,
         nftId: newNft.id,
       });
 
-      await handleActionSuccess('NFT Minted Successfully!', `A new companion is born! Welcome, ${mintedName}!`, XP_VALUES.MINT_RANDOM);
+      await handleActionSuccess('NFT Minted Successfully!', `A new companion is born! Welcome, ${newNft.name}!`, XP_VALUES.MINT_RANDOM);
     },
   });
 
@@ -175,7 +164,6 @@ export default function LandingPage() {
         });
         await handleActionSuccess('Badge Claimed!', 'Woohoo! You just earned the "Active Contributor" badge. Well done!', XP_VALUES.CLAIM_BADGE);
         
-        // --- Trigger Evolution on Genesis bot specifically for this badge claim ---
         const genesisBot = nfts.find(n => n.id === 'nft1');
         if (genesisBot) {
             const evolvedBot = await triggerEvolution(genesisBot.id, 'Claimed "Active Contributor" Badge');
@@ -187,18 +175,16 @@ export default function LandingPage() {
     }
   });
 
-    // Clear the evolving state after animation
     useEffect(() => {
         if (evolvingNftId) {
-            const timer = setTimeout(() => setEvolvingNftId(null), 2100); // Animation duration is 2s
+            const timer = setTimeout(() => setEvolvingNftId(null), 2100);
             return () => clearTimeout(timer);
         }
     }, [evolvingNftId]);
     
-    // Clear the newly minted state after animation
     useEffect(() => {
         if (newlyMintedNftId) {
-            const timer = setTimeout(() => setNewlyMintedNftId(null), 1600); // Animation is 1.5s
+            const timer = setTimeout(() => setNewlyMintedNftId(null), 1600);
             return () => clearTimeout(timer);
         }
     }, [newlyMintedNftId]);
@@ -256,7 +242,15 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
             <div className="lg:col-span-2 flex flex-col gap-8">
               <section ref={collectionRef} className="animate-fade-in-up" style={{ animationDelay: '450ms' }}>
-                <HallOfOrigins items={nfts} loading={nftsLoading} onMint={mintNFT} isMinting={isMinting} evolvingNftId={evolvingNftId} newlyMintedNftId={newlyMintedNftId} onShowHistory={setViewingCertificateForNft} />
+                <NFTGallery 
+                    items={nfts} 
+                    loading={nftsLoading} 
+                    onMint={() => mintNFT()} 
+                    isMinting={isMinting} 
+                    evolvingNftId={evolvingNftId} 
+                    newlyMintedNftId={newlyMintedNftId} 
+                    onShowHistory={setViewingCertificateForNft} 
+                />
               </section>
               <section ref={designsRef} className="animate-fade-in-up" style={{ animationDelay: '600ms' }}>
                 <MyDesigns items={designs} loading={designsLoading} />

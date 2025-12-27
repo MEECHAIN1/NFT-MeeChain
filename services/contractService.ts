@@ -7,7 +7,7 @@ const useMockContractWrite = ({ onSuccess }: { onSuccess: (...args: any[]) => vo
 
     const write = useCallback((...args: any[]) => {
         setIsLoading(true);
-        console.log("Simulating transaction...", { args });
+        console.log("Simulating blockchain transaction...");
         
         // Simulate network delay for a blockchain transaction
         setTimeout(() => {
